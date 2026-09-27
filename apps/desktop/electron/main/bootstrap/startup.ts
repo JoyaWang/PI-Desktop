@@ -27,6 +27,7 @@ import {
   type McpControlController,
   type McpControlInvokeInput,
 } from "../mcp-control";
+import { agentEventHub } from "../agent-events";
 import type { ModelsDevCatalog } from "../models-dev-catalog";
 import type { AppUpdaterController } from "../updater";
 import type { HostProcess } from "../host-process";
@@ -37,7 +38,6 @@ import {
   ensureCrashDumpsDirectory,
   reportPreviousCrashDumps,
 } from "../crash-report";
-
 type IpcInvoker = (
   channel: string,
   args?: readonly unknown[],
@@ -343,7 +343,7 @@ export function registerApplicationStartup(deps: StartupDependencies): void {
           port: process.env.PI_DESKTOP_MCP_PORT
             ? Number(process.env.PI_DESKTOP_MCP_PORT)
             : undefined,
-          controller: state.desktopControl ?? undefined,
+          eventHub: agentEventHub,
           log: (level, message, data) => logger.app("runtime", level, message, { data }),
         });
         await state.mcpControl.start();

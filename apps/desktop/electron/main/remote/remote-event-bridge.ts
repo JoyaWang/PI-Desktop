@@ -10,6 +10,7 @@
  * connection layer (Stage 3) drives subscription and unsubscription.
  */
 import { IPC } from "@pi-desktop/shared";
+import { agentEventHub } from "../agent-events";
 import type {
   AgentEvent,
   AgentEventEnvelope,
@@ -156,6 +157,7 @@ export function createRemoteEventBridge(options: RemoteEventBridgeOptions): Remo
       ...(envelope.parentToolCallId ? { parentToolCallId: envelope.parentToolCallId } : {}),
       ...(envelope.agentName ? { agentName: envelope.agentName } : {}),
     };
+    agentEventHub.ingest(local);
     emit(IPC.event.agentMessage, local);
   };
 
